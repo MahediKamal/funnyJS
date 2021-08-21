@@ -1,0 +1,17 @@
+.arr-container{
+	background-color:red;
+	/* margin: auto; */
+	display: inline-block;
+}
+
+.cell{
+	background-color:blue;
+	display: inline-block;
+	margin: auto;
+    text-align: center;
+    box-shadow: 5px 5px 5px 5px #f8c1c1;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

@@ -6,6 +6,14 @@ var clr = [ 'yellow',         'pink', 'Tomato',    'Orange', 'DodgerBlue',
 
 
 
+function delay(delayInms) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(2);
+        }, delayInms);
+    });
+}
+
 
 function create_cell(i, j, w, h, val){
 	let tag = document.createElement("div");
@@ -51,7 +59,19 @@ function show_array(row, clm){
 }
 
 
+async function change_color(){
+	for(let i=1; i<9; i++){
+		for(let j=1; j<9; j++){
+			board_array[i][j] = (i+j) % 7;
+			let delayres = await delay(200);
+			show_array(20,28);
+		}
+	}
+}
+
+
 // .............................after refresh this will execute..................................
 window.onload = function create_board(row, clm) {
     show_array(10,15);
+    change_color();
 }

@@ -25,8 +25,33 @@ function create_cell(i, j, w, h, val){
 	element.appendChild(tag);
 }
 
+function show_array(row, clm){
+	const parent = document.getElementById("board");
+	while (parent.firstChild) {
+		parent.firstChild.remove()
+	}
+	
+	l = 1200 / clm;
+	h = 550 / row
+	for(let i=0; i<=row; i++){
+		for(let j=0; j<=clm; j++){
+			if(i==0 && j==0){
+				create_cell(i,j,l,h,board_array[i][j]);
+			}else if(i==0){
+				create_cell(i,j,l,h,j);
+			}else if(j==0){
+				create_cell(i,j,l,h,i);
+			}else{
+				create_cell(i,j,l,h,board_array[i][j]);
+			}
+		}
+		let tag = document.createElement("br");
+		document.getElementById("board").appendChild(tag);
+	}
+}
+
 
 // .............................after refresh this will execute..................................
 window.onload = function create_board(row, clm) {
-    create_cell(1, 2, 50, 50, 5);
+    show_array(10,15);
 }

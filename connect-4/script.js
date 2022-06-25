@@ -9,6 +9,13 @@ emptyCell = 0;
 oragneBall = 3; // player ball
 redBall = 2; // AI ball
 
+function reSet(){
+    for(let i=0; i<6; i++){
+        for(let j=0; j<7; j++){
+            board_array[i][j] = emptyCell;
+        }
+    }
+}
 
 function delay(delayInms) {
     return new Promise(resolve => {
@@ -25,7 +32,17 @@ function create_cell(i, j, val){
 	tag.classList.add("cell");
     tag.addEventListener("click",function(e){
         put_stone(j, oragneBall);
+        if(wining_state(oragneBall) == true){
+            alert("player has won");
+            reSet();
+            show_array(6,7);
+        }
         play();
+        if(wining_state(redBall) == true){
+            alert("AI has won");
+            reSet();
+            show_array(6,7);
+        }
     })
 	tag.style.width = cellHeight + 'px';
 	tag.style.height = cellWeight + 'px';
@@ -73,6 +90,72 @@ function wining_state(colour){
             if(cnt == 4) return true;
         }
     }
+
+    // ......................cross check1 (/) 4
+    for(let i = 0; i < 6; i++){
+        let row = i;
+        let col = 0;
+
+        while(row >= 0 && col <7){
+            let cnt = 0;
+            let a = row; let b = col;
+            for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
+                if(board_array[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--;
+            col++;
+        }
+    }
+
+    for(let i = 0; i < 7; i++){
+        let col = i;
+        let row = 5;
+
+        while(row >= 0 && col <7){
+            let cnt = 0;
+            let a = row; let b = col;
+            for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
+                if(board_array[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--;
+            col++;
+        }
+    }
+
+    // ......................cross check2 (\) 4
+    for(let i=6; i>=0; i--){
+        let col = i;
+        let row = 5;
+
+        while(col >=0 && row>=0){
+            let cnt  = 0;
+            let a = row; let b = col;
+
+            for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
+                if(board_array[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--; col--;
+        }
+    }
+
+    for(let i=5; i>=0; i--){
+        let row = i;
+        let col = 6;
+
+        while(col >= 0 && row >=0){
+            let cnt = 0;
+            let a = row; let b = col;
+            for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
+                if(board_array[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--; col--;
+        }
+    }
+
     return false;
 }
 
@@ -513,13 +596,11 @@ function play(){
         i++;
     }
     
-    //
+    // if block is not needed then do optimal move
 
     i = 0;
     let max_score = 0;
     next_sate = JSON.parse(JSON.stringify(board_array));
-    // next_sate[row[0]][clm[0]] = redBall;
-
     for(let r of row){
         c = clm[i];
         tmp_board = arr = JSON.parse(JSON.stringify(board_array));

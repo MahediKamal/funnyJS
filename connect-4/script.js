@@ -9,6 +9,14 @@ emptyCell = 0;
 oragneBall = 3; // player ball
 redBall = 2; // AI ball
 
+function min(a, b){
+    if(a < b) return a;
+    return b;
+}
+function max(a, b){
+    if(a > b) return a;
+    return b;
+}
 function reSet(){
     for(let i=0; i<6; i++){
         for(let j=0; j<7; j++){
@@ -30,6 +38,7 @@ function create_cell(i, j, val){
 	tag.classList.add("cell");
     tag.addEventListener("click",function(e){
         put_stone(j, oragneBall);
+        show_array(6,7);
         if(wining_state(board_array ,oragneBall) == true){
             alert("player has won");
             reSet();
@@ -692,10 +701,84 @@ function advancedAI(){
     let col = ret[0];
     put_stone(col, redBall);
 }
+function minmax_with_alphaBetaPruning(board, depth, maximizingPlayer, alpha, beta){
+    let nodes = get_child_nodes(board);
+    let row = nodes[0];
+    let col = nodes[1];
+    // consoleLogBoard(board);
+    
 
+    // console.log(row);
+    terminal = isTerminalNode(board);
+    if(depth == 0 || terminal == true){
+        if(terminal == true){
+            if(wining_state(board, redBall)){// AI win
+                return [0, 1000000000];
+            }else if(wining_state(board, oragneBall)){// player win
+                return [0, -1000000000];
+            }else{
+                return [0, 0];
+            }
+        }else{ // depth = 0
+            return [0, Huristic_score(board, redBall)];
+        }
+    }
+    if(maximizingPlayer == true){
+        let val = -1000000000;
+
+        let idxC = col[Math.floor(Math.random()*col.length)];
+        let i = 0;
+        for(let c of col){
+            let r = row[i];
+            let new_board = JSON.parse(JSON.stringify(board));
+            new_board[r][c] = redBall;
+            let ret = minmax(JSON.parse(JSON.stringify(new_board)), depth-1, false);
+            let score = ret[1]; 
+            if(score > val){
+                val = score;
+                idxC = c;
+            }
+            alpha = max(alpha, val);
+            if(alpha >= beta){
+                break
+            }
+            i++;
+        }
+        return [idxC, val];
+    }else{ // minimizing player
+        let val = 1000000000;
+        let idxC = col[Math.floor(Math.random()*col.length)];
+        let i = 0;
+        for(let c of col){
+            let r = row[i];
+            let new_board = JSON.parse(JSON.stringify(board));
+            new_board[r][c] = oragneBall;
+            let ret = minmax(JSON.parse(JSON.stringify(new_board)), depth-1, true);
+            let score = ret[1]; 
+            if(score < val){
+                val = score;
+                idxC = c;
+            }
+            beta = min(beta, val);
+            if(alpha >= beta){
+                break;
+            }
+            i++;
+        }
+        return [idxC, val];
+    }
+
+}
+function expertAI(){
+    let new_board = JSON.parse(JSON.stringify(board_array));
+    let ret = minmax_with_alphaBetaPruning(JSON.parse(JSON.stringify(new_board)), 6, false);
+    let col = ret[0];
+    put_stone(col, redBall);
+}
 function play(){
     // AI move
     console.log("AI move is on--");
     // normalAI();
-    advancedAI();
+    // advancedAI();
+    expertAI();
 }

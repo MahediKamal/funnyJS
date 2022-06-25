@@ -25,6 +25,7 @@ function create_cell(i, j, val){
 	tag.classList.add("cell");
     tag.addEventListener("click",function(e){
         put_stone(j, oragneBall);
+        play();
     })
 	tag.style.width = cellHeight + 'px';
 	tag.style.height = cellWeight + 'px';
@@ -94,7 +95,9 @@ async function put_stone(column, colour){
         window.alert("wrong position selection");
     }
 
-    console.log(Huristic_score(board_array, oragneBall));
+    // console.log(Huristic_score(board_array, oragneBall));
+    // get_child_nodes();
+    // play();
 }
 
 window.onload = function create_board() {
@@ -120,9 +123,9 @@ function Huristic_score(arr, colour){
         for(let j=0; j<7; j++){
             let cnt = 0;
             for(let elm=j, x=0; elm <7 && x <4; elm++, x++){
-                if(board_array[i][elm] == colour) cnt++;
+                if(arr[i][elm] == colour) cnt++;
             }
-            if(cnt == 4) score += 100;
+            if(cnt == 4) score += 10000;
         }
     }
     // vertical check 4
@@ -130,9 +133,9 @@ function Huristic_score(arr, colour){
         for(let i=0; i<6; i++){
             cnt = 0;
             for(let elm=i, x=0; elm<6 && x<4; elm++, x++){
-                if(board_array[elm][j] == colour) cnt++;
+                if(arr[elm][j] == colour) cnt++;
             }
-            if(cnt == 4) score += 100;
+            if(cnt == 4) score += 10000;
         }
     }
     // ......................cross check1 (/) 4
@@ -144,9 +147,9 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 4) score += 100;
+            if(cnt == 4) score += 10000;
             row--;
             col++;
         }
@@ -160,9 +163,9 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 4) score += 100;
+            if(cnt == 4) score += 10000;
             row--;
             col++;
         }
@@ -178,9 +181,9 @@ function Huristic_score(arr, colour){
             let a = row; let b = col;
 
             for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 4) score += 100;
+            if(cnt == 4) score += 10000;
             row--; col--;
         }
     }
@@ -193,9 +196,9 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 4) score += 100;
+            if(cnt == 4) score += 10000;
             row--; col--;
         }
     }
@@ -205,7 +208,7 @@ function Huristic_score(arr, colour){
         for(let j=0; j<7; j++){
             let cnt = 0;
             for(let elm=j, x=0; elm <7 && x <3; elm++, x++){
-                if(board_array[i][elm] == colour) cnt++;
+                if(arr[i][elm] == colour) cnt++;
             }
             if(cnt == 3) score += 40;
         }
@@ -215,7 +218,7 @@ function Huristic_score(arr, colour){
         for(let i=0; i<6; i++){
             cnt = 0;
             for(let elm=i, x=0; elm<6 && x<3; elm++, x++){
-                if(board_array[elm][j] == colour) cnt++;
+                if(arr[elm][j] == colour) cnt++;
             }
             if(cnt == 3) score += 40;
         }
@@ -229,7 +232,7 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<3 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 3) score += 40;
             row--;
@@ -245,7 +248,7 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<3 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 3) score += 40;
             row--;
@@ -263,7 +266,7 @@ function Huristic_score(arr, colour){
             let a = row; let b = col;
 
             for(let x=0; x<3 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 3) score += 40;
             row--; col--;
@@ -278,7 +281,7 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<3 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 3) score += 40;
             row--; col--;
@@ -291,9 +294,9 @@ function Huristic_score(arr, colour){
         for(let j=0; j<7; j++){
             let cnt = 0;
             for(let elm=j, x=0; elm <7 && x <2; elm++, x++){
-                if(board_array[i][elm] == colour) cnt++;
+                if(arr[i][elm] == colour) cnt++;
             }
-            if(cnt == 2) score += 10;
+            if(cnt == 2) score += 5;
         }
     }
     // vertical check 3
@@ -301,9 +304,9 @@ function Huristic_score(arr, colour){
         for(let i=0; i<6; i++){
             cnt = 0;
             for(let elm=i, x=0; elm<6 && x<2; elm++, x++){
-                if(board_array[elm][j] == colour) cnt++;
+                if(arr[elm][j] == colour) cnt++;
             }
-            if(cnt == 2) score += 10;
+            if(cnt == 2) score += 5;
         }
     }
     // ......................cross check1 (/) 2
@@ -315,9 +318,9 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<2 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 2) score += 10;
+            if(cnt == 2) score += 5;
             row--;
             col++;
         }
@@ -331,9 +334,9 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<2 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 2) score += 10;
+            if(cnt == 2) score += 5;
             row--;
             col++;
         }
@@ -349,9 +352,9 @@ function Huristic_score(arr, colour){
             let a = row; let b = col;
 
             for(let x=0; x<2 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 2) score += 10;
+            if(cnt == 2) score += 5;
             row--; col--;
         }
     }
@@ -364,12 +367,174 @@ function Huristic_score(arr, colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<2 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
-            if(cnt == 2) score += 10;
+            if(cnt == 2) score += 5;
             row--; col--;
         }
     }
     return score;
     
+}
+
+function Emergency_block_needed(arr, colour){
+    // horizontal check 4
+    for(let i=0; i<6; i++){
+        for(let j=0; j<7; j++){
+            let cnt = 0;
+            for(let elm=j, x=0; elm <7 && x <4; elm++, x++){
+                if(arr[i][elm] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+        }
+    }
+    // vertical check 4
+    for(let j=0; j<7; j++){
+        for(let i=0; i<6; i++){
+            cnt = 0;
+            for(let elm=i, x=0; elm<6 && x<4; elm++, x++){
+                if(arr[elm][j] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+        }
+    }
+    // ......................cross check1 (/) 4
+    for(let i = 0; i < 6; i++){
+        let row = i;
+        let col = 0;
+
+        while(row >= 0 && col <7){
+            let cnt = 0;
+            let a = row; let b = col;
+            for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
+                if(arr[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--;
+            col++;
+        }
+    }
+
+    for(let i = 0; i < 7; i++){
+        let col = i;
+        let row = 5;
+
+        while(row >= 0 && col <7){
+            let cnt = 0;
+            let a = row; let b = col;
+            for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
+                if(arr[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--;
+            col++;
+        }
+    }
+
+    // ......................cross check2 (\) 4
+    for(let i=6; i>=0; i--){
+        let col = i;
+        let row = 5;
+
+        while(col >=0 && row>=0){
+            let cnt  = 0;
+            let a = row; let b = col;
+
+            for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
+                if(arr[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--; col--;
+        }
+    }
+
+    for(let i=5; i>=0; i--){
+        let row = i;
+        let col = 6;
+
+        while(col >= 0 && row >=0){
+            let cnt = 0;
+            let a = row; let b = col;
+            for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
+                if(arr[a][b] == colour) cnt++;
+            }
+            if(cnt == 4) return true;
+            row--; col--;
+        }
+    }
+}
+function get_child_nodes(){
+    clm = [];
+    for(let i=0; i<7; i++){
+        if(board_array[0][i] == emptyCell){
+            clm.push(i);
+        }
+    }
+
+    row = [];
+    for(let c of clm){
+        // find row
+        let r = 0;
+        let res = 0;
+        while(r < 6){
+            if(board_array[r][c] == 0){
+                res = r;
+            }else break;
+            r++;
+        }
+        row.push(res);
+    }
+    rr = [...row];
+    cc = [...clm];
+    rr[0] = 9; rr[2] = 4;
+    return rr, cc;
+}
+function play(){
+    // AI move
+    console.log("AI move is on--")
+    row, clm = get_child_nodes();
+    if(row.length == 0){
+        alert("AI has no move");
+        return;
+    }
+    // first check if emergency block is needed
+    let next_sate = JSON.parse(JSON.stringify(board_array));
+    let i = 0;
+    for(let r of row){
+        c = clm[i];
+        tmp_board = arr = JSON.parse(JSON.stringify(board_array));
+        tmp_board[r][c] = oragneBall; // human player ball is orange
+        
+        if(Emergency_block_needed(tmp_board, oragneBall) == true){
+            board_array[r][c] = redBall;
+            show_array(6,7);
+            return;
+        }
+        i++;
+    }
+    
+    //
+
+    i = 0;
+    let max_score = 0;
+    next_sate = JSON.parse(JSON.stringify(board_array));
+    // next_sate[row[0]][clm[0]] = redBall;
+
+    for(let r of row){
+        c = clm[i];
+        tmp_board = arr = JSON.parse(JSON.stringify(board_array));
+        tmp_board[r][c] = redBall; // AI ball is red
+        let sc = Huristic_score(tmp_board, redBall);
+
+        
+        if(sc >= max_score){
+            max_score = sc;
+            next_sate = JSON.parse(JSON.stringify(tmp_board));
+        }
+        i++;
+    }
+    board_array = JSON.parse(JSON.stringify(next_sate));
+    show_array(6,7);
+
+
 }

@@ -20,5 +20,24 @@ body {
     border-bottom-right-radius: 40px;
     border-bottom-left-radius: 40px;
     margin: 3px;
+    cursor: pointer; 
 }
 
+.level-cell{
+	background-color:blue;
+	display: inline-block;
+	margin: auto;
+    text-align: center;
+    box-shadow: 0px 0px 1px 1px #e60707;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-color: #bd1a1a;
+    margin: 15px;
+    cursor: pointer; 
+}.level-cell:hover {
+    background-color: rebeccapurple;
+}.level-cell:active {
+    background-color: yellow;
+}

@@ -2,12 +2,17 @@ var board_array = new Array(6).fill(0).map(() => new Array(7).fill(0));
 var clr = [ 'White',  'pink', 'Red',    'Orange', 'DodgerBlue',
             'MediumSeaGreen', 'Gray', 'SlateBlue' ,'Violet', 'LightGray'];
 
-cellHeight = 80;
-cellWeight = 80;
+cellHeight = 70;
+cellWeight = 70;
 
 emptyCell = 0;
 oragneBall = 3; // player ball
 redBall = 2; // AI ball
+var gameLavel;
+
+var easy = 1;
+var midium = 2;
+var hard = 3;
 
 function min(a, b){
     if(a < b) return a;
@@ -187,7 +192,7 @@ async function put_stone(column, colour){
 }
 window.onload = function create_board() {
     show_array(6,7);
-    
+    create_level();
 }
 
 // ..................................AI..................................
@@ -591,14 +596,14 @@ function isTerminalNode(arr){
 }
 function normalAI(){
     nodes = get_child_nodes(board_array);
-    row = nodes[0]
+    row = nodes[0];
     clm = nodes[1];
     if(row.length == 0){
         alert("AI has no move");
         return;
     }
     // first check if emergency block is needed
-    let next_sate = JSON.parse(JSON.stringify(board_array));
+    // let next_sate = JSON.parse(JSON.stringify(board_array));
     let i = 0;
     for(let r of row){
         c = clm[i];
@@ -617,7 +622,9 @@ function normalAI(){
 
     i = 0;
     let max_score = 0;
-    next_sate = JSON.parse(JSON.stringify(board_array));
+    let next_sate = JSON.parse(JSON.stringify(board_array));
+    rand = Math.floor(Math.random()*clm.length);
+    next_sate[row[rand]][clm[rand]] = redBall;
     for(let r of row){
         c = clm[i];
         tmp_board = arr = JSON.parse(JSON.stringify(board_array));
@@ -625,7 +632,7 @@ function normalAI(){
         let sc = Huristic_score(tmp_board, redBall);
 
         
-        if(sc >= max_score){
+        if(sc > max_score){
             max_score = sc;
             next_sate = JSON.parse(JSON.stringify(tmp_board));
         }
@@ -696,6 +703,28 @@ function minmax(board, depth, maximizingPlayer){
 
 }
 function advancedAI(){
+    nodes = get_child_nodes(board_array);
+    row = nodes[0];
+    clm = nodes[1];
+    if(row.length == 0){
+        alert("AI has no move");
+        return;
+    }
+    // first check if emergency block is needed
+    let i = 0;
+    for(let r of row){
+        c = clm[i];
+        tmp_board = arr = JSON.parse(JSON.stringify(board_array));
+        tmp_board[r][c] = oragneBall; // human player ball is orange
+        
+        if(Emergency_block_needed(tmp_board, oragneBall) == true){
+            board_array[r][c] = redBall;
+            show_array(6,7);
+            return;
+        }
+        i++;
+    }
+    // else do optimal move
     let new_board = JSON.parse(JSON.stringify(board_array));
     let ret = minmax(JSON.parse(JSON.stringify(new_board)), 5, false);
     let col = ret[0];
@@ -778,7 +807,87 @@ function expertAI(){
 function play(){
     // AI move
     console.log("AI move is on--");
-    // normalAI();
-    // advancedAI();
-    expertAI();
+    if(gameLavel == easy)
+        normalAI();
+    else if(gameLavel == midium)
+        advancedAI();
+    else
+        expertAI();
+}
+
+//////////////....................button....................
+function create_level(){
+	let tag = document.createElement("div");
+	tag.classList.add("level-cell");
+    tag.addEventListener("click",function(e){
+        gameLavel = easy;
+        
+        element = document.getElementById("header");
+        while (element.firstChild) {
+            element.firstChild.remove();
+        }
+        txt = document.createTextNode("Connect Four: level 1");
+        element.appendChild(txt);
+        reSet();
+        play();
+    })
+	tag.style.width = 40 + 'px';
+	tag.style.height = 40 + 'px';
+	
+    tag.style.backgroundColor = clr[5];
+    txt = document.createTextNode("level 1");
+    tag.appendChild(txt);
+	
+	element = document.getElementById("level");
+	element.appendChild(tag);
+    
+    tag4 = document.createElement("br");
+	// delement.appendChild(tag4);
+    ///
+    tag2 = document.createElement("div");
+	tag2.classList.add("level-cell");
+    tag2.addEventListener("click",function(e){
+        gameLavel = midium;
+        element = document.getElementById("header");
+        while (element.firstChild) {
+            element.firstChild.remove();
+        }
+        txt = document.createTextNode("Connect Four: level 2");
+        element.appendChild(txt);
+        reSet();
+        play();
+    })
+	tag2.style.width = 40 + 'px';
+	tag2.style.height = 40 + 'px';
+	
+    tag2.style.backgroundColor = clr[5];
+    txt2 = document.createTextNode("level 2");
+    tag2.appendChild(txt2);
+	
+	
+	element.appendChild(tag2);
+
+    // element.appendChild(tag4);
+    ///
+    tag3 = document.createElement("div");
+	tag3.classList.add("level-cell");
+    tag3.addEventListener("click",function(e){
+        gameLavel = hard;
+        element = document.getElementById("header");
+        while (element.firstChild) {
+            element.firstChild.remove();
+        }
+        txt = document.createTextNode("Connect Four: level 3");
+        element.appendChild(txt);
+        reSet();
+        play();
+    })
+	tag3.style.width = 40 + 'px';
+	tag3.style.height = 40 + 'px';
+	
+    tag3.style.backgroundColor = clr[5];
+    let txt3 = document.createTextNode("level 3");
+    tag3.appendChild(txt3);
+	
+	element.appendChild(tag3);
 }

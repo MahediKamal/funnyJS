@@ -9,6 +9,7 @@ emptyCell = 0;
 oragneBall = 3; // player ball
 redBall = 2; // AI ball
 var gameLavel;
+var moveCnt;
 
 var easy = 1;
 var midium = 2;
@@ -42,18 +43,21 @@ function create_cell(i, j, val){
 	let tag = document.createElement("div");
 	tag.classList.add("cell");
     tag.addEventListener("click",function(e){
-        put_stone(j, oragneBall);
+        rand = Math.floor(Math.random()*7);
+        if(moveCnt == 0 && rand % 2 == 0){
+            put_stone(j, oragneBall);
+        }
         show_array(6,7);
         if(wining_state(board_array ,oragneBall) == true){
+            show_array(6,7);
             alert("player has won");
             reSet();
-            show_array(6,7);
         }
         play();
         if(wining_state(board_array, redBall) == true){
+            show_array(6,7);
             alert("AI has won");
             reSet();
-            show_array(6,7);
         }
     })
 	tag.style.width = cellHeight + 'px';
@@ -828,6 +832,7 @@ function create_level(){
         }
         txt = document.createTextNode("Connect Four: level 1");
         element.appendChild(txt);
+        moveCnt = 0;
         reSet();
         play();
     })
@@ -854,6 +859,7 @@ function create_level(){
         }
         txt = document.createTextNode("Connect Four: level 2");
         element.appendChild(txt);
+        moveCnt = 0;
         reSet();
         play();
     })
@@ -879,6 +885,7 @@ function create_level(){
         }
         txt = document.createTextNode("Connect Four: level 3");
         element.appendChild(txt);
+        moveCnt = 0;
         reSet();
         play();
     })

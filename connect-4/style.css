@@ -36,8 +36,4 @@ body {
     border-color: #bd1a1a;
     margin: 15px;
     cursor: pointer; 
-}.level-cell:hover {
-    background-color: rebeccapurple;
-}.level-cell:active {
-    background-color: yellow;
 }

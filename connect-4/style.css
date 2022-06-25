@@ -1,3 +1,8 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
 .arr-container{
 	background-color:rgb(10, 10, 10);
 	box-shadow: 10px 10px 10px 10px #423e3e;
@@ -16,3 +21,4 @@
     border-bottom-left-radius: 40px;
     margin: 3px;
 }
+

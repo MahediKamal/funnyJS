@@ -16,7 +16,6 @@ function reSet(){
         }
     }
 }
-
 function delay(delayInms) {
     return new Promise(resolve => {
         setTimeout(() => {
@@ -26,19 +25,18 @@ function delay(delayInms) {
     // const curSec=new Date().getSeconds();
     // while(new Date().getSeconds()!=((curSec+1)%60));
 }
-
 function create_cell(i, j, val){
 	let tag = document.createElement("div");
 	tag.classList.add("cell");
     tag.addEventListener("click",function(e){
         put_stone(j, oragneBall);
-        if(wining_state(oragneBall) == true){
+        if(wining_state(board_array ,oragneBall) == true){
             alert("player has won");
             reSet();
             show_array(6,7);
         }
         play();
-        if(wining_state(redBall) == true){
+        if(wining_state(board_array, redBall) == true){
             alert("AI has won");
             reSet();
             show_array(6,7);
@@ -52,7 +50,6 @@ function create_cell(i, j, val){
 	let element = document.getElementById("board");
 	element.appendChild(tag);
 }
-
 async function show_array(row, clm){
 	const parent = document.getElementById("board");
 	while (parent.firstChild) {
@@ -67,15 +64,13 @@ async function show_array(row, clm){
 		document.getElementById("board").appendChild(tag);
 	}
 }
-
-
-function wining_state(colour){
+function wining_state(arr, colour){
     // horizontal check
     for(let i=0; i<6; i++){
         for(let j=0; j<7; j++){
             let cnt = 0;
             for(let elm=j, x=0; elm <7 && x <4; elm++, x++){
-                if(board_array[i][elm] == colour) cnt++;
+                if(arr[i][elm] == colour) cnt++;
             }
             if(cnt == 4) return true;
         }
@@ -85,7 +80,7 @@ function wining_state(colour){
         for(let i=0; i<6; i++){
             cnt = 0;
             for(let elm=i, x=0; elm<6 && x<4; elm++, x++){
-                if(board_array[elm][j] == colour) cnt++;
+                if(arr[elm][j] == colour) cnt++;
             }
             if(cnt == 4) return true;
         }
@@ -100,7 +95,7 @@ function wining_state(colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 4) return true;
             row--;
@@ -116,7 +111,7 @@ function wining_state(colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<4 && a>=0 && b<7; x++, a--, b++){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 4) return true;
             row--;
@@ -134,7 +129,7 @@ function wining_state(colour){
             let a = row; let b = col;
 
             for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 4) return true;
             row--; col--;
@@ -149,7 +144,7 @@ function wining_state(colour){
             let cnt = 0;
             let a = row; let b = col;
             for(let x=0; x<4 && a>=0 && b>=0; x++, a--, b--){
-                if(board_array[a][b] == colour) cnt++;
+                if(arr[a][b] == colour) cnt++;
             }
             if(cnt == 4) return true;
             row--; col--;
@@ -158,7 +153,6 @@ function wining_state(colour){
 
     return false;
 }
-
 async function put_stone(column, colour){
     row = -1;
     for(let i = 0; i<6; i++){
@@ -182,7 +176,6 @@ async function put_stone(column, colour){
     // get_child_nodes();
     // play();
 }
-
 window.onload = function create_board() {
     show_array(6,7);
     
@@ -459,7 +452,6 @@ function Huristic_score(arr, colour){
     return score;
     
 }
-
 function Emergency_block_needed(arr, colour){
     // horizontal check 4
     for(let i=0; i<6; i++){
@@ -546,21 +538,21 @@ function Emergency_block_needed(arr, colour){
         }
     }
 }
-function get_child_nodes(){
-    clm = [];
+function get_child_nodes(arr){
+    let clm = [];
     for(let i=0; i<7; i++){
-        if(board_array[0][i] == emptyCell){
+        if(arr[0][i] == emptyCell){
             clm.push(i);
         }
     }
 
-    row = [];
+    let row = [];
     for(let c of clm){
         // find row
         let r = 0;
         let res = 0;
         while(r < 6){
-            if(board_array[r][c] == 0){
+            if(arr[r][c] == 0){
                 res = r;
             }else break;
             r++;
@@ -569,13 +561,29 @@ function get_child_nodes(){
     }
     rr = [...row];
     cc = [...clm];
-    rr[0] = 9; rr[2] = 4;
-    return rr, cc;
+
+    
+    
+    return [rr, cc];
 }
-function play(){
-    // AI move
-    console.log("AI move is on--")
-    row, clm = get_child_nodes();
+function isTerminalNode(arr){
+    if(wining_state(arr, redBall) == true || wining_state(arr, oragneBall) == true){
+        return true;
+    }
+    let flg = true;
+    for(let i=0; i<6; i++){
+        for(let j=0; j<7; j++){
+            if(arr[i][j] == 0){
+                flg = false;
+            }
+        }
+    }
+    return flg;
+}
+function normalAI(){
+    nodes = get_child_nodes(board_array);
+    row = nodes[0]
+    clm = nodes[1];
     if(row.length == 0){
         alert("AI has no move");
         return;
@@ -616,6 +624,78 @@ function play(){
     }
     board_array = JSON.parse(JSON.stringify(next_sate));
     show_array(6,7);
+}
 
+function minmax(board, depth, maximizingPlayer){
+    let nodes = get_child_nodes(board);
+    let row = nodes[0];
+    let col = nodes[1];
+    // consoleLogBoard(board);
+    
 
+    // console.log(row);
+    terminal = isTerminalNode(board);
+    if(depth == 0 || terminal == true){
+        if(terminal == true){
+            if(wining_state(board, redBall)){// AI win
+                return [0, 1000000000];
+            }else if(wining_state(board, oragneBall)){// player win
+                return [0, -1000000000];
+            }else{
+                return [0, 0];
+            }
+        }else{ // depth = 0
+            return [0, Huristic_score(board, redBall)];
+        }
+    }
+    if(maximizingPlayer == true){
+        let val = -1000000000;
+
+        let idxC = col[Math.floor(Math.random()*col.length)];
+        let i = 0;
+        for(let c of col){
+            let r = row[i];
+            let new_board = JSON.parse(JSON.stringify(board));
+            new_board[r][c] = redBall;
+            let ret = minmax(JSON.parse(JSON.stringify(new_board)), depth-1, false);
+            let score = ret[1]; 
+            if(score > val){
+                val = score;
+                idxC = c;
+            }
+            i++;
+        }
+        return [idxC, val];
+    }else{ // minimizing player
+        let val = 1000000000;
+        let idxC = col[Math.floor(Math.random()*col.length)];
+        let i = 0;
+        for(let c of col){
+            let r = row[i];
+            let new_board = JSON.parse(JSON.stringify(board));
+            new_board[r][c] = oragneBall;
+            let ret = minmax(JSON.parse(JSON.stringify(new_board)), depth-1, true);
+            let score = ret[1]; 
+            if(score < val){
+                val = score;
+                idxC = c;
+            }
+            i++;
+        }
+        return [idxC, val];
+    }
+
+}
+function advancedAI(){
+    let new_board = JSON.parse(JSON.stringify(board_array));
+    let ret = minmax(JSON.parse(JSON.stringify(new_board)), 5, false);
+    let col = ret[0];
+    put_stone(col, redBall);
+}
+
+function play(){
+    // AI move
+    console.log("AI move is on--");
+    // normalAI();
+    advancedAI();
 }

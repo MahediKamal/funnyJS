@@ -39,23 +39,31 @@ function delay(delayInms) {
     // const curSec=new Date().getSeconds();
     // while(new Date().getSeconds()!=((curSec+1)%60));
 }
-function create_cell(i, j, val){
+async function create_cell(i, j, val){
 	let tag = document.createElement("div");
 	tag.classList.add("cell");
     tag.addEventListener("click",function(e){
-        rand = Math.floor(Math.random()*7);
-        if(moveCnt == 0 && rand % 2 == 0){
-            put_stone(j, oragneBall);
-        }
+        moveCnt = 2;
+        // rand = Math.floor(Math.random()*7);
+        // if(moveCnt == 0 && rand % 2 == 0){
+        //     put_stone(j, oragneBall);
+        //     moveCnt = 2;
+        // }else if(moveCnt == 2){
+        //     put_stone(j, oragneBall);
+        // }
+        put_stone(j, oragneBall);
         show_array(6,7);
         if(wining_state(board_array ,oragneBall) == true){
             show_array(6,7);
+            delay(1000);
+
             alert("player has won");
             reSet();
         }
         play();
         if(wining_state(board_array, redBall) == true){
             show_array(6,7);
+            delay(1000);
             alert("AI has won");
             reSet();
         }
@@ -811,6 +819,16 @@ function expertAI(){
 function play(){
     // AI move
     console.log("AI move is on--");
+    if(moveCnt == 0 && gameLavel == 2){
+        put_stone(2, redBall);
+        show_array(6,7);
+        return;
+    }
+    if(moveCnt == 0 && gameLavel == 3){
+        put_stone(3, redBall);
+        show_array(6,7);
+        return;
+    }
     if(gameLavel == easy)
         normalAI();
     else if(gameLavel == midium)
